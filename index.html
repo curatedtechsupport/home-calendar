@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Calendar Dashboard</title>
+    <title>Saints Calendar Dashboard ⚜️</title>
     <style>
         * {
             margin: 0;
@@ -13,32 +13,53 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #101820 0%, #2c2416 50%, #D3BC8D 100%);
             min-height: 100vh;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
+            background: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            box-shadow: 0 0 30px rgba(211, 188, 141, 0.3);
         }
 
         .header {
-            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #ea4335 100%);
-            color: white;
+            background: linear-gradient(135deg, #101820 0%, #2c2416 50%, #D3BC8D 100%);
+            color: #D3BC8D;
             padding: 20px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #D3BC8D 0%, #f4e4a6 50%, #D3BC8D 100%);
         }
 
         .header h1 {
             font-size: 2rem;
-            font-weight: 300;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .saints-logo {
+            font-size: 2.5rem;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
         }
 
         .header-controls {
@@ -48,39 +69,58 @@
         }
 
         .user-info {
-            background: rgba(255,255,255,0.2);
+            background: rgba(211, 188, 141, 0.2);
+            color: #D3BC8D;
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.9rem;
+            border: 1px solid rgba(211, 188, 141, 0.3);
         }
 
         .btn {
-            background: #4285f4;
-            color: white;
+            background: linear-gradient(135deg, #D3BC8D 0%, #f4e4a6 100%);
+            color: #101820;
             border: none;
             padding: 10px 20px;
             border-radius: 25px;
             font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
+            box-shadow: 0 3px 10px rgba(211, 188, 141, 0.3);
         }
 
         .btn:hover {
-            background: #3367d6;
+            background: linear-gradient(135deg, #f4e4a6 0%, #D3BC8D 100%);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(66, 133, 244, 0.3);
+            box-shadow: 0 6px 20px rgba(211, 188, 141, 0.4);
         }
 
-        .btn.secondary { background: #34a853; }
-        .btn.danger { background: #ea4335; }
-        .btn.warning { background: #ff9800; }
-        .btn.secondary:hover { background: #2e7d32; }
-        .btn.danger:hover { background: #d93025; }
-        .btn.warning:hover { background: #f57c00; }
+        .btn.secondary { 
+            background: linear-gradient(135deg, #101820 0%, #2c2416 100%);
+            color: #D3BC8D;
+        }
+        .btn.danger { 
+            background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%);
+            color: white;
+        }
+        .btn.warning { 
+            background: linear-gradient(135deg, #FF8C00 0%, #FFA500 100%);
+            color: #101820;
+        }
+        .btn.secondary:hover { 
+            background: linear-gradient(135deg, #2c2416 0%, #101820 100%);
+        }
+        .btn.danger:hover { 
+            background: linear-gradient(135deg, #DC143C 0%, #8B0000 100%);
+        }
+        .btn.warning:hover { 
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+        }
 
         .main-content {
             display: flex;
@@ -89,41 +129,45 @@
 
         .sidebar {
             width: 280px;
-            background: #f8f9fa;
-            border-right: 1px solid #e0e0e0;
+            background: linear-gradient(180deg, #f8f6f0 0%, #f0ede0 100%);
+            border-right: 3px solid #D3BC8D;
             padding: 20px 0;
         }
 
         .nav-item {
             display: block;
-            padding: 12px 25px;
-            color: #333;
+            padding: 15px 25px;
+            color: #101820;
             text-decoration: none;
-            border-left: 3px solid transparent;
+            border-left: 4px solid transparent;
             transition: all 0.3s ease;
+            font-weight: 500;
         }
 
         .nav-item:hover {
-            background: #e3f2fd;
-            border-left-color: #4285f4;
+            background: linear-gradient(90deg, rgba(211, 188, 141, 0.2) 0%, rgba(211, 188, 141, 0.05) 100%);
+            border-left-color: #D3BC8D;
+            color: #101820;
         }
 
         .nav-item.active {
-            background: #e3f2fd;
-            border-left-color: #4285f4;
-            color: #1565c0;
-            font-weight: 600;
+            background: linear-gradient(90deg, rgba(211, 188, 141, 0.3) 0%, rgba(211, 188, 141, 0.1) 100%);
+            border-left-color: #D3BC8D;
+            color: #101820;
+            font-weight: 700;
+            box-shadow: inset 0 0 10px rgba(211, 188, 141, 0.2);
         }
 
         .nav-item .nav-icon {
-            margin-right: 10px;
-            font-size: 1.2rem;
+            margin-right: 12px;
+            font-size: 1.3rem;
         }
 
         .content-area {
             flex: 1;
             padding: 30px;
             overflow-y: auto;
+            background: linear-gradient(180deg, #ffffff 0%, #fdfcf8 100%);
         }
 
         .page {
@@ -136,9 +180,12 @@
 
         .page-title {
             font-size: 2rem;
-            color: #333;
+            color: #101820;
             margin-bottom: 30px;
             font-weight: 300;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .stats-grid {
@@ -149,42 +196,48 @@
         }
 
         .stat-card {
-            background: white;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfcf8 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            border-left: 5px solid #4285f4;
+            box-shadow: 0 8px 25px rgba(16, 24, 32, 0.1);
+            border-left: 6px solid #D3BC8D;
             transition: all 0.3s ease;
+            border: 1px solid rgba(211, 188, 141, 0.2);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            box-shadow: 0 15px 35px rgba(16, 24, 32, 0.15);
+            border-left-color: #f4e4a6;
         }
 
         .stat-number {
             font-size: 2.5rem;
-            font-weight: 600;
-            color: #4285f4;
+            font-weight: 700;
+            color: #D3BC8D;
             margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
 
         .stat-label {
-            color: #666;
+            color: #101820;
             font-size: 0.9rem;
+            font-weight: 500;
         }
 
         .view-options {
-            background: white;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfcf8 100%);
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 25px rgba(16, 24, 32, 0.1);
             margin-bottom: 30px;
+            border: 1px solid rgba(211, 188, 141, 0.2);
         }
 
         .view-options h3 {
             margin-bottom: 20px;
-            color: #333;
+            color: #101820;
+            font-weight: 600;
         }
 
         .filter-controls {
@@ -201,35 +254,38 @@
 
         .filter-group label {
             margin-bottom: 5px;
-            color: #555;
-            font-weight: 500;
+            color: #101820;
+            font-weight: 600;
             font-size: 0.9rem;
         }
 
         .filter-group select, .filter-group input {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border: 2px solid #D3BC8D;
             border-radius: 8px;
             font-size: 0.9rem;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
+            background: #fdfcf8;
         }
 
         .filter-group select:focus, .filter-group input:focus {
             outline: none;
-            border-color: #4285f4;
+            border-color: #f4e4a6;
+            box-shadow: 0 0 0 3px rgba(211, 188, 141, 0.2);
         }
 
         .calendar-management {
-            background: white;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfcf8 100%);
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 25px rgba(16, 24, 32, 0.1);
             overflow: hidden;
+            border: 1px solid rgba(211, 188, 141, 0.2);
         }
 
         .calendar-management-header {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #101820 0%, #2c2416 100%);
+            color: #D3BC8D;
             padding: 20px 25px;
-            border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -243,13 +299,13 @@
 
         .calendar-card {
             padding: 25px;
-            border-bottom: 1px solid #f0f0f0;
-            border-right: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(211, 188, 141, 0.2);
+            border-right: 1px solid rgba(211, 188, 141, 0.2);
             transition: all 0.3s ease;
         }
 
         .calendar-card:hover {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, rgba(211, 188, 141, 0.05) 0%, rgba(211, 188, 141, 0.02) 100%);
         }
 
         .calendar-header {
@@ -262,7 +318,7 @@
         .calendar-name {
             font-weight: 600;
             font-size: 1.1rem;
-            color: #333;
+            color: #101820;
             margin-bottom: 5px;
         }
 
@@ -288,13 +344,14 @@
 
         .calendar-stat-number {
             font-size: 1.5rem;
-            font-weight: 600;
-            color: #4285f4;
+            font-weight: 700;
+            color: #D3BC8D;
         }
 
         .calendar-stat-label {
             font-size: 0.75rem;
-            color: #666;
+            color: #101820;
+            font-weight: 500;
         }
 
         .calendar-settings {
@@ -315,7 +372,7 @@
         }
 
         .toggle-switch.active {
-            background: #4285f4;
+            background: #D3BC8D;
         }
 
         .toggle-slider {
@@ -327,6 +384,7 @@
             background: white;
             border-radius: 50%;
             transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .toggle-switch.active .toggle-slider {
@@ -344,17 +402,18 @@
         }
 
         .calendar-events {
-            background: white;
+            background: linear-gradient(135deg, #ffffff 0%, #fdfcf8 100%);
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 25px rgba(16, 24, 32, 0.1);
             overflow: hidden;
-            border-left: 5px solid #4285f4;
+            border-left: 6px solid #D3BC8D;
+            border: 1px solid rgba(211, 188, 141, 0.2);
         }
 
         .calendar-events-header {
-            background: #f8f9fa;
+            background: linear-gradient(135deg, #101820 0%, #2c2416 100%);
+            color: #D3BC8D;
             padding: 20px 25px;
-            border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -362,16 +421,17 @@
 
         .calendar-title {
             font-weight: 600;
-            color: #333;
+            color: #D3BC8D;
         }
 
         .event-count {
-            background: #e3f2fd;
-            color: #1565c0;
+            background: rgba(211, 188, 141, 0.2);
+            color: #D3BC8D;
             padding: 4px 12px;
             border-radius: 20px;
             font-size: 0.8rem;
             font-weight: 600;
+            border: 1px solid rgba(211, 188, 141, 0.3);
         }
 
         .events-list {
@@ -381,12 +441,12 @@
 
         .event-item {
             padding: 20px 25px;
-            border-bottom: 1px solid #f0f0f0;
+            border-bottom: 1px solid rgba(211, 188, 141, 0.1);
             transition: all 0.3s ease;
         }
 
         .event-item:hover {
-            background: #f8f9fa;
+            background: linear-gradient(90deg, rgba(211, 188, 141, 0.05) 0%, rgba(211, 188, 141, 0.02) 100%);
         }
 
         .event-item:last-child {
@@ -395,7 +455,7 @@
 
         .event-title {
             font-weight: 600;
-            color: #333;
+            color: #101820;
             margin-bottom: 8px;
         }
 
@@ -411,17 +471,167 @@
             font-style: italic;
         }
 
+        /* MONTH VIEW STYLES */
+        .month-calendar {
+            background: linear-gradient(135deg, #ffffff 0%, #fdfcf8 100%);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(16, 24, 32, 0.1);
+            overflow: hidden;
+            border: 1px solid rgba(211, 188, 141, 0.2);
+        }
+
+        .month-header {
+            background: linear-gradient(135deg, #101820 0%, #2c2416 100%);
+            color: #D3BC8D;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .month-nav {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .month-nav button {
+            background: rgba(211, 188, 141, 0.2);
+            color: #D3BC8D;
+            border: 1px solid rgba(211, 188, 141, 0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .month-nav button:hover {
+            background: rgba(211, 188, 141, 0.3);
+            transform: scale(1.05);
+        }
+
+        .month-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            min-width: 200px;
+        }
+
+        .calendar-grid-month {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0;
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, #D3BC8D 0%, #f4e4a6 100%);
+            color: #101820;
+            padding: 15px 8px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-right: 1px solid rgba(16, 24, 32, 0.1);
+        }
+
+        .day-header:last-child {
+            border-right: none;
+        }
+
+        .day-cell {
+            min-height: 120px;
+            border-right: 1px solid rgba(211, 188, 141, 0.2);
+            border-bottom: 1px solid rgba(211, 188, 141, 0.2);
+            padding: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .day-cell:hover {
+            background: linear-gradient(135deg, rgba(211, 188, 141, 0.05) 0%, rgba(211, 188, 141, 0.02) 100%);
+        }
+
+        .day-cell:last-child {
+            border-right: none;
+        }
+
+        .day-number {
+            font-weight: 600;
+            color: #101820;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .day-cell.other-month .day-number {
+            color: #ccc;
+        }
+
+        .day-cell.today {
+            background: linear-gradient(135deg, rgba(211, 188, 141, 0.2) 0%, rgba(211, 188, 141, 0.1) 100%);
+        }
+
+        .day-cell.today .day-number {
+            background: #D3BC8D;
+            color: #101820;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.8rem;
+        }
+
+        .day-events {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .day-event {
+            background: #D3BC8D;
+            color: #101820;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .day-event:hover {
+            background: #f4e4a6;
+            transform: scale(1.02);
+        }
+
+        .more-events {
+            color: #101820;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            padding: 2px;
+        }
+
+        .more-events:hover {
+            text-decoration: underline;
+        }
+
         .loading {
             text-align: center;
             padding: 60px;
-            color: #666;
+            color: #101820;
         }
 
         .spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid #f3f3f3;
-            border-top: 5px solid #4285f4;
+            border: 5px solid rgba(211, 188, 141, 0.3);
+            border-top: 5px solid #D3BC8D;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 0 auto 20px;
@@ -440,11 +650,12 @@
             min-height: 80vh;
             text-align: center;
             padding: 40px;
+            background: linear-gradient(135deg, rgba(211, 188, 141, 0.05) 0%, rgba(211, 188, 141, 0.02) 100%);
         }
 
         .auth-screen h2 {
             margin-bottom: 20px;
-            color: #333;
+            color: #101820;
             font-weight: 300;
         }
 
@@ -455,21 +666,23 @@
         }
 
         .success {
-            background: #d4edda;
+            background: linear-gradient(135deg, #d4edda 0%, #c8e6c9 100%);
             color: #155724;
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
             border-left: 4px solid #28a745;
+            box-shadow: 0 3px 10px rgba(40, 167, 69, 0.2);
         }
 
         .error {
-            background: #f8d7da;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
             padding: 15px;
             border-radius: 10px;
             margin: 20px 0;
             border-left: 4px solid #dc3545;
+            box-shadow: 0 3px 10px rgba(220, 53, 69, 0.2);
         }
 
         @media (max-width: 1024px) {
@@ -480,7 +693,7 @@
             .sidebar {
                 width: 100%;
                 border-right: none;
-                border-bottom: 1px solid #e0e0e0;
+                border-bottom: 3px solid #D3BC8D;
             }
             
             .sidebar .nav-item {
@@ -501,13 +714,24 @@
             .calendar-grid {
                 grid-template-columns: 1fr;
             }
+
+            .day-cell {
+                min-height: 80px;
+            }
+
+            .day-event {
+                font-size: 0.65rem;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📅 Calendar Dashboard</h1>
+            <h1>
+                <span class="saints-logo">⚜️</span>
+                Saints Calendar Dashboard
+            </h1>
             <div class="header-controls">
                 <div id="user-info" class="user-info" style="display: none;">
                     👤 <span id="user-email"></span>
@@ -522,8 +746,8 @@
         </div>
 
         <div id="auth-screen" class="auth-screen">
-            <h2>Welcome to your Calendar Dashboard</h2>
-            <p>Sign in with your Google account to access your calendars and unlock powerful viewing options.</p>
+            <h2>⚜️ Welcome to your Saints Calendar Dashboard</h2>
+            <p>Sign in with your Google account to access your calendars with championship-level organization!</p>
             <button class="btn" onclick="signIn()" style="font-size: 1.1rem; padding: 15px 30px;">
                 🔐 Get Started - Sign In with Google
             </button>
@@ -533,6 +757,9 @@
             <div class="sidebar">
                 <a href="#" class="nav-item active" onclick="showPage('dashboard')">
                     <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('month')">
+                    <span class="nav-icon">🗓️</span>Month View
                 </a>
                 <a href="#" class="nav-item" onclick="showPage('calendars')">
                     <span class="nav-icon">📅</span>Calendar Management
@@ -554,29 +781,29 @@
             <div class="content-area">
                 <!-- Dashboard Page -->
                 <div id="dashboard-page" class="page active">
-                    <h2 class="page-title">Dashboard Overview</h2>
+                    <h2 class="page-title">⚜️ Dashboard Overview</h2>
                     
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-number" id="total-calendars">0</div>
                             <div class="stat-label">Active Calendars</div>
                         </div>
-                        <div class="stat-card" style="border-left-color: #34a853;">
-                            <div class="stat-number" style="color: #34a853;" id="total-events">0</div>
+                        <div class="stat-card" style="border-left-color: #101820;">
+                            <div class="stat-number" style="color: #101820;" id="total-events">0</div>
                             <div class="stat-label">Upcoming Events</div>
                         </div>
-                        <div class="stat-card" style="border-left-color: #ea4335;">
-                            <div class="stat-number" style="color: #ea4335;" id="today-events">0</div>
+                        <div class="stat-card" style="border-left-color: #8B0000;">
+                            <div class="stat-number" style="color: #8B0000;" id="today-events">0</div>
                             <div class="stat-label">Events Today</div>
                         </div>
-                        <div class="stat-card" style="border-left-color: #fbbc05;">
-                            <div class="stat-number" style="color: #fbbc05;" id="week-events">0</div>
+                        <div class="stat-card" style="border-left-color: #FF8C00;">
+                            <div class="stat-number" style="color: #FF8C00;" id="week-events">0</div>
                             <div class="stat-label">This Week</div>
                         </div>
                     </div>
 
                     <div class="view-options">
-                        <h3>📋 Quick View Options</h3>
+                        <h3>🏈 Quick View Options</h3>
                         <div class="filter-controls">
                             <div class="filter-group">
                                 <label>Time Range</label>
@@ -623,9 +850,37 @@
                     </div>
                 </div>
 
+                <!-- Month View Page -->
+                <div id="month-page" class="page">
+                    <h2 class="page-title">🗓️ Month View</h2>
+                    
+                    <div class="month-calendar">
+                        <div class="month-header">
+                            <div class="month-nav">
+                                <button onclick="previousMonth()">← Previous</button>
+                            </div>
+                            <div class="month-title" id="month-title"></div>
+                            <div class="month-nav">
+                                <button onclick="nextMonth()">Next →</button>
+                                <button onclick="goToToday()" style="margin-left: 15px;">Today</button>
+                            </div>
+                        </div>
+                        <div class="calendar-grid-month">
+                            <div class="day-header">Sunday</div>
+                            <div class="day-header">Monday</div>
+                            <div class="day-header">Tuesday</div>
+                            <div class="day-header">Wednesday</div>
+                            <div class="day-header">Thursday</div>
+                            <div class="day-header">Friday</div>
+                            <div class="day-header">Saturday</div>
+                            <!-- Calendar days will be inserted here -->
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Calendar Management Page -->
                 <div id="calendars-page" class="page">
-                    <h2 class="page-title">Calendar Management</h2>
+                    <h2 class="page-title">📅 Calendar Management</h2>
                     
                     <div class="calendar-management">
                         <div class="calendar-management-header">
@@ -641,31 +896,25 @@
 
                 <!-- Agenda View Page -->
                 <div id="agenda-page" class="page">
-                    <h2 class="page-title">Agenda View</h2>
-                    <div id="agenda-content">
-                        <!-- Agenda view will be populated here -->
-                    </div>
+                    <h2 class="page-title">📋 Agenda View</h2>
+                    <div id="agenda-content"></div>
                 </div>
 
                 <!-- Timeline View Page -->
                 <div id="timeline-page" class="page">
-                    <h2 class="page-title">Timeline View</h2>
-                    <div id="timeline-content">
-                        <!-- Timeline view will be populated here -->
-                    </div>
+                    <h2 class="page-title">⏰ Timeline View</h2>
+                    <div id="timeline-content"></div>
                 </div>
 
                 <!-- Analytics Page -->
                 <div id="analytics-page" class="page">
-                    <h2 class="page-title">Calendar Analytics</h2>
-                    <div id="analytics-content">
-                        <!-- Analytics will be populated here -->
-                    </div>
+                    <h2 class="page-title">📈 Calendar Analytics</h2>
+                    <div id="analytics-content"></div>
                 </div>
 
                 <!-- Settings Page -->
                 <div id="settings-page" class="page">
-                    <h2 class="page-title">Settings</h2>
+                    <h2 class="page-title">⚙️ Settings</h2>
                     <div id="settings-content">
                         <div class="view-options">
                             <h3>⚙️ Display Settings</h3>
@@ -696,7 +945,7 @@
 
         <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
-            <p>Loading your calendar data...</p>
+            <p>Loading your championship calendar data...</p>
         </div>
     </div>
 
@@ -717,6 +966,7 @@
         let calendars = [];
         let allEvents = [];
         let currentUser = null;
+        let currentDate = new Date();
 
         // Initialize APIs
         async function handleGapiLoad() {
@@ -793,7 +1043,7 @@
 
             // Auto-load user calendars
             await addMyCalendars();
-            showSuccess('Welcome! Your calendars are loading...');
+            showSuccess('⚜️ Welcome to your Saints Calendar! Your calendars are loading...');
         }
 
         function onSignOut() {
@@ -830,6 +1080,9 @@
                 case 'dashboard':
                     loadDashboard();
                     break;
+                case 'month':
+                    loadMonthView();
+                    break;
                 case 'calendars':
                     loadCalendarManagement();
                     break;
@@ -859,7 +1112,7 @@
                     calendars.push({
                         id: cal.id,
                         name: cal.summary,
-                        color: cal.backgroundColor || '#4285f4',
+                        color: cal.backgroundColor || '#D3BC8D',
                         enabled: true,
                         primary: cal.primary || false
                     });
@@ -868,7 +1121,7 @@
                 updateCalendarFilter();
                 await refreshAllData();
                 loadCalendarManagement();
-                showSuccess(`Added ${calendarList.length} calendars from your account.`);
+                showSuccess(`⚜️ Added ${calendarList.length} calendars from your account.`);
             } catch (error) {
                 showError('Failed to load your calendars: ' + error.message);
             } finally {
@@ -895,8 +1148,8 @@
             allEvents = [];
 
             const now = new Date();
-            const timeMin = now.toISOString();
-            const timeMax = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString();
+            const timeMin = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString();
+            const timeMax = new Date(now.getFullYear(), now.getMonth() + 2, 0).toISOString();
 
             for (const calendar of calendars.filter(c => c.enabled)) {
                 try {
@@ -906,7 +1159,7 @@
                         timeMax: timeMax,
                         showDeleted: false,
                         singleEvents: true,
-                        maxResults: 50,
+                        maxResults: 100,
                         orderBy: 'startTime'
                     });
 
@@ -947,6 +1200,157 @@
             document.getElementById('total-events').textContent = allEvents.length;
             document.getElementById('today-events').textContent = todayEvents.length;
             document.getElementById('week-events').textContent = weekEvents.length;
+        }
+
+        // Month View Functions
+        function loadMonthView() {
+            renderMonthCalendar();
+        }
+
+        function renderMonthCalendar() {
+            const monthTitle = document.getElementById('month-title');
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            
+            monthTitle.textContent = `${monthNames[currentDate.getMonth()]} ${currentDate.getFullYear()}`;
+
+            const calendarGrid = document.querySelector('.calendar-grid-month');
+            
+            // Remove existing day cells
+            const existingDays = calendarGrid.querySelectorAll('.day-cell');
+            existingDays.forEach(day => day.remove());
+
+            const firstDay = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
+            const lastDay = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(startDate.getDate() - firstDay.getDay());
+            
+            const today = new Date();
+            const isCurrentMonth = today.getMonth() === currentDate.getMonth() && today.getFullYear() === currentDate.getFullYear();
+
+            for (let i = 0; i < 42; i++) { // 6 weeks × 7 days
+                const cellDate = new Date(startDate);
+                cellDate.setDate(startDate.getDate() + i);
+                
+                const dayCell = document.createElement('div');
+                dayCell.className = 'day-cell';
+                
+                if (cellDate.getMonth() !== currentDate.getMonth()) {
+                    dayCell.classList.add('other-month');
+                }
+                
+                if (isCurrentMonth && cellDate.toDateString() === today.toDateString()) {
+                    dayCell.classList.add('today');
+                }
+
+                dayCell.innerHTML = `
+                    <div class="day-number">${cellDate.getDate()}</div>
+                    <div class="day-events" id="day-${cellDate.getTime()}"></div>
+                `;
+
+                calendarGrid.appendChild(dayCell);
+                
+                // Add events for this day
+                renderDayEvents(cellDate);
+            }
+        }
+
+        function renderDayEvents(date) {
+            const dayEventsContainer = document.getElementById(`day-${date.getTime()}`);
+            const dayStart = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            const dayEnd = new Date(dayStart.getTime() + 24 * 60 * 60 * 1000);
+
+            const dayEvents = allEvents.filter(event => {
+                const eventStart = new Date(event.start.dateTime || event.start.date);
+                const eventEnd = new Date(event.end.dateTime || event.end.date);
+                
+                // Check if event overlaps with this day
+                return (eventStart < dayEnd && eventEnd > dayStart);
+            }).sort((a, b) => {
+                const aTime = new Date(a.start.dateTime || a.start.date);
+                const bTime = new Date(b.start.dateTime || b.start.date);
+                return aTime - bTime;
+            });
+
+            dayEventsContainer.innerHTML = '';
+
+            const maxVisible = 3;
+            const visibleEvents = dayEvents.slice(0, maxVisible);
+            const hiddenCount = dayEvents.length - maxVisible;
+
+            visibleEvents.forEach(event => {
+                const eventDiv = document.createElement('div');
+                eventDiv.className = 'day-event';
+                eventDiv.style.backgroundColor = event.calendarColor;
+                eventDiv.textContent = event.summary || 'No title';
+                eventDiv.title = `${event.summary || 'No title'} (${event.calendarName})`;
+                
+                dayEventsContainer.appendChild(eventDiv);
+            });
+
+            if (hiddenCount > 0) {
+                const moreDiv = document.createElement('div');
+                moreDiv.className = 'more-events';
+                moreDiv.textContent = `+${hiddenCount} more`;
+                moreDiv.onclick = () => showDayEvents(date, dayEvents);
+                dayEventsContainer.appendChild(moreDiv);
+            }
+        }
+
+        function showDayEvents(date, events) {
+            const dateStr = date.toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            
+            let eventsList = events.map(event => {
+                const time = event.start.dateTime ? 
+                    new Date(event.start.dateTime).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) :
+                    'All day';
+                return `<div style="padding: 10px; border-left: 4px solid ${event.calendarColor}; margin: 5px 0; background: #f9f9f9;">
+                    <strong>${event.summary || 'No title'}</strong><br>
+                    <small>${time} - ${event.calendarName}</small>
+                    ${event.location ? `<br><small>📍 ${event.location}</small>` : ''}
+                </div>`;
+            }).join('');
+
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+                background: rgba(0,0,0,0.5); z-index: 1000;
+                display: flex; align-items: center; justify-content: center;
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; max-height: 80vh; overflow-y: auto;">
+                    <h3 style="margin-bottom: 20px; color: #101820;">${dateStr}</h3>
+                    ${events.length > 0 ? eventsList : '<p style="color: #666;">No events scheduled</p>'}
+                    <button onclick="this.closest('.modal').remove()" style="margin-top: 20px; padding: 10px 20px; background: #D3BC8D; border: none; border-radius: 8px; cursor: pointer;">Close</button>
+                </div>
+            `;
+            modal.className = 'modal';
+            modal.onclick = (e) => {
+                if (e.target === modal) modal.remove();
+            };
+
+            document.body.appendChild(modal);
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            renderMonthCalendar();
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            renderMonthCalendar();
+        }
+
+        function goToToday() {
+            currentDate = new Date();
+            renderMonthCalendar();
         }
 
         // Dashboard
@@ -1121,6 +1525,10 @@
                 calendar.enabled = !calendar.enabled;
                 loadCalendarManagement();
                 refreshAllData();
+                // Update month view if it's currently active
+                if (document.getElementById('month-page').classList.contains('active')) {
+                    renderMonthCalendar();
+                }
             }
         }
 
@@ -1131,7 +1539,11 @@
                 updateCalendarFilter();
                 updateStats();
                 loadCalendarManagement();
-                showSuccess('Calendar removed successfully.');
+                // Update month view if it's currently active
+                if (document.getElementById('month-page').classList.contains('active')) {
+                    renderMonthCalendar();
+                }
+                showSuccess('⚜️ Calendar removed successfully.');
             }
         }
 
@@ -1155,7 +1567,7 @@
                 eventsByDate[dateKey].push(event);
             });
 
-            let html = '<div class="view-options"><h3>📋 Agenda View</h3><p>All your events organized by date</p></div>';
+            let html = '<div class="view-options"><h3>🏈 Agenda View</h3><p>All your events organized by date in championship style</p></div>';
             
             Object.keys(eventsByDate).forEach(dateKey => {
                 const events = eventsByDate[dateKey];
@@ -1176,7 +1588,7 @@
                                             <div class="event-time">${formatEventTime(event)}</div>
                                             ${event.location ? `<div class="event-location">📍 ${escapeHtml(event.location)}</div>` : ''}
                                         </div>
-                                        <div style="background: ${event.calendarColor}; color: white; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem; white-space: nowrap;">
+                                        <div style="background: ${event.calendarColor}; color: #101820; padding: 4px 8px; border-radius: 12px; font-size: 0.7rem; white-space: nowrap; font-weight: 600;">
                                             ${escapeHtml(event.calendarName)}
                                         </div>
                                     </div>
@@ -1203,10 +1615,10 @@
                 new Date(a.start.dateTime || a.start.date) - new Date(b.start.dateTime || b.start.date)
             );
 
-            let html = '<div class="view-options"><h3>⏰ Today\'s Timeline</h3><p>Your schedule for today in chronological order</p></div>';
+            let html = '<div class="view-options"><h3>⚜️ Today\'s Timeline</h3><p>Your championship schedule for today in winning order</p></div>';
             
             if (todayEvents.length === 0) {
-                html += '<div class="calendar-events"><div class="events-list"><div class="event-item" style="text-align: center; color: #666;">No events scheduled for today</div></div></div>';
+                html += '<div class="calendar-events"><div class="events-list"><div class="event-item" style="text-align: center; color: #666;">No events scheduled for today - time to celebrate! ⚜️</div></div></div>';
             } else {
                 html += '<div class="calendar-events"><div class="events-list">';
                 
@@ -1215,11 +1627,11 @@
                     const isNow = now >= eventTime && now <= new Date(event.end.dateTime || event.end.date);
                     
                     html += `
-                        <div class="event-item" style="${isNow ? 'background: #e3f2fd; border-left: 4px solid #2196f3;' : ''}">
+                        <div class="event-item" style="${isNow ? 'background: linear-gradient(90deg, rgba(211, 188, 141, 0.2) 0%, rgba(211, 188, 141, 0.1) 100%); border-left: 4px solid #D3BC8D;' : ''}">
                             <div style="display: flex; align-items: center; gap: 15px;">
-                                <div style="min-width: 80px; text-align: center; font-weight: 600; color: ${isNow ? '#2196f3' : '#666'};">
+                                <div style="min-width: 80px; text-align: center; font-weight: 600; color: ${isNow ? '#D3BC8D' : '#666'};">
                                     ${event.start.dateTime ? eventTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : 'All Day'}
-                                    ${isNow ? '<div style="font-size: 0.7rem; color: #2196f3;">NOW</div>' : ''}
+                                    ${isNow ? '<div style="font-size: 0.7rem; color: #D3BC8D;">⚜️ NOW</div>' : ''}
                                 </div>
                                 <div style="flex: 1;">
                                     <div class="event-title">${escapeHtml(event.summary || 'No title')}</div>
@@ -1255,25 +1667,25 @@
             
             let html = `
                 <div class="view-options">
-                    <h3>📈 Calendar Analytics</h3>
-                    <p>Insights about your calendar usage</p>
+                    <h3>⚜️ Calendar Analytics</h3>
+                    <p>Championship-level insights about your calendar performance</p>
                 </div>
                 
                 <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-number">${totalEvents}</div>
-                        <div class="stat-label">Total Events (Next 30 Days)</div>
+                        <div class="stat-label">Total Events (Next 90 Days)</div>
                     </div>
-                    <div class="stat-card" style="border-left-color: #34a853;">
-                        <div class="stat-number" style="color: #34a853;">${calendars.length}</div>
+                    <div class="stat-card" style="border-left-color: #101820;">
+                        <div class="stat-number" style="color: #101820;">${calendars.length}</div>
                         <div class="stat-label">Active Calendars</div>
                     </div>
-                    <div class="stat-card" style="border-left-color: #ea4335;">
-                        <div class="stat-number" style="color: #ea4335;">${(totalEvents / 30).toFixed(1)}</div>
+                    <div class="stat-card" style="border-left-color: #8B0000;">
+                        <div class="stat-number" style="color: #8B0000;">${(totalEvents / 30).toFixed(1)}</div>
                         <div class="stat-label">Events per Day (Avg)</div>
                     </div>
-                    <div class="stat-card" style="border-left-color: #fbbc05;">
-                        <div class="stat-number" style="color: #fbbc05;">${calendarStats[0]?.name || 'N/A'}</div>
+                    <div class="stat-card" style="border-left-color: #FF8C00;">
+                        <div class="stat-number" style="color: #FF8C00;">${calendarStats[0]?.name.substring(0, 10) + '...' || 'N/A'}</div>
                         <div class="stat-label">Most Active Calendar</div>
                     </div>
                 </div>
@@ -1333,12 +1745,12 @@
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "calendar_events.csv");
+            link.setAttribute("download", "saints_calendar_events.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            showSuccess('Events exported to CSV file!');
+            showSuccess('⚜️ Events exported to CSV file with championship style!');
         }
 
         function showLoading(show) {
