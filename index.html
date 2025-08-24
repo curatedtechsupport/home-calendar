@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Calendar Display</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #ea4335 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .auth-section {
+            padding: 40px;
+            text-align: center;
+        }
+
+        .btn {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            background: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .calendar-controls {
+            padding: 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .calendar-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .calendar-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-input:focus {
+            outline: none;
+            border-color: #4285f4;
+            box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+        }
+
+        .calendar-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .calendar-item {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-item:hover {
+            background: #e8f0fe;
+            transform: translateY(-2px);
+        }
+
+        .calendar-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .calendar-id {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .remove-btn {
+            background: #ea4335;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .remove-btn:hover {
+            background: #d93025;
+            transform: scale(1.05);
+        }
+
+        .events-section {
+            padding: 30px;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .calendar-events {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #4285f4;
+        }
+
+        .calendar-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .event {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #34a853;
+            transition: all 0.3s ease;
+        }
+
+        .event:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .event-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .event-time {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4285f4;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ffeaa7;
+            color: #2d3436;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #fdcb6e;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #28a745;
+        }
+
+        .refresh-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .last-updated {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .calendar-input-group {
+                flex-direction: column;
+            }
+
+            .calendar-input {
+                min-width: auto;
+            }
+
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Multi-Calendar Display</h1>
+            <p>View and manage multiple Google calendars in one place</p>
+        </div>
+
+        <div id="auth-section" class="auth-section">
+            <p style="margin-bottom: 20px; color: #666;">Sign in with your Google account to access your calendars</p>
+            <button id="sign-in-btn" class="btn" onclick="signIn()">
+                🔐 Sign in with Google
+            </button>
+            <button id="sign-out-btn" class="btn" onclick="signOut()" style="display: none; background: #ea4335;">
+                🚪 Sign Out
+            </button>
+        </div>
+
+        <div id="calendar-controls" class="calendar-controls" style="display: none;">
+            <h3 style="margin-bottom: 20px; color: #333;">Add Calendars</h3>
+            <div class="calendar-input-group">
+                <input 
+                    type="text" 
+                    id="calendar-id-input" 
+                    class="calendar-input" 
+                    placeholder="Enter calendar ID (e.g., example@gmail.com or calendar-id@group.calendar.google.com)"
+                />
+                <button class="btn" onclick="addCalendar()">
+                    ➕ Add Calendar
+                </button>
+                <button class="btn" onclick="addMyCalendars()" style="background: #34a853;">
+                    📋 Add My Calendars
+                </button>
+            </div>
+            
+            <div id="calendar-list" class="calendar-list"></div>
+        </div>
+
+        <div id="events-section" class="events-section" style="display: none;">
+            <div class="refresh-controls">
+                <h3 style="color: #333;">Calendar Events</h3>
+                <div>
+                    <span id="last-updated" class="last-updated"></span>
+                    <button class="btn" onclick="refreshEvents()" style="background: #34a853; margin-left: 15px;">
+                        🔄 Refresh
+                    </button>
+                </div>
+            </div>
+            <div id="events-grid" class="events-grid"></div>
+        </div>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading calendar events...</p>
+        </div>
+    </div>
+
+    <script async defer src="https://apis.google.com/js/api.js" onload="initializeGapi()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="initializeGsi()"></script>
+
+    <script>
+        // Configuration - Replace with your own Google API credentials
+        const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.googleusercontent.com';
+        const API_KEY = 'YOUR_GOOGLE_API_KEY';
+        const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+        const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
+
+        let gapi;
+        let google;
+        let tokenClient;
+        let gapiInited = false;
+        let gsiInited = false;
+        
+        // In-memory storage for calendars (since localStorage is not available)
+        let calendars = [];
+        let isSignedIn = false;
+
+        // Initialize Google API
+        async function initializeGapi() {
+            await new Promise((resolve) => {
+                gapi.load('client', resolve);
+            });
+            
+            await gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: [DISCOVERY_DOC],
+            });
+            
+            gapiInited = true;
+            maybeEnableButtons();
+        }
+
+        // Initialize Google Sign-In
+        function initializeGsi() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: (response) => {
+                    if (response.error) {
+                        showError('Authentication failed: ' + response.error);
+                        return;
+                    }
+                    onSignIn();
+                },
+            });
+            gsiInited = true;
+            maybeEnableButtons();
+        }
+
+        function maybeEnableButtons() {
+            if (gapiInited && gsiInited) {
+                document.getElementById('sign-in-btn').disabled = false;
+                
+                // Check if we need to set up API credentials
+                if (CLIENT_ID.includes('YOUR_') || API_KEY.includes('YOUR_')) {
+                    showSetupInstructions();
+                }
+            }
+        }
+
+        function showSetupInstructions() {
+            const authSection = document.getElementById('auth-section');
+            authSection.innerHTML = `
+                <div class="error">
+                    <h3>⚠️ Setup Required</h3>
+                    <p>To use this calendar viewer, you need to set up Google API credentials:</p>
+                    <ol style="text-align: left; margin: 15px 0; padding-left: 20px;">
+                        <li>Go to the <a href="https://console.cloud.google.com/" target="_blank">Google Cloud Console</a></li>
+                        <li>Create a new project or select an existing one</li>
+                        <li>Enable the Google Calendar API</li>
+                        <li>Create credentials (OAuth 2.0 Client ID and API Key)</li>
+                        <li>Replace CLIENT_ID and API_KEY in the code with your credentials</li>
+                        <li>Add your domain to authorized JavaScript origins</li>
+                    </ol>
+                    <p><strong>Note:</strong> This is a demo that requires your own Google API setup for security reasons.</p>
+                </div>
+            `;
+        }
+
+        function signIn() {
+            if (!gapiInited || !gsiInited) {
+                showError('Google APIs are still loading. Please try again.');
+                return;
+            }
+            tokenClient.requestAccessToken();
+        }
+
+        function signOut() {
+            const token = gapi.client.getToken();
+            if (token) {
+                google.accounts.oauth2.revoke(token.access_token);
+                gapi.client.setToken('');
+            }
+            onSignOut();
+        }
+
+        function onSignIn() {
+            isSignedIn = true;
+            document.getElementById('sign-in-btn').style.display = 'none';
+            document.getElementById('sign-out-btn').style.display = 'inline-flex';
+            document.getElementById('calendar-controls').style.display = 'block';
+            document.getElementById('events-section').style.display = 'block';
+            showSuccess('Successfully signed in! You can now add calendars.');
+        }
+
+        function onSignOut() {
+            isSignedIn = false;
+            calendars = [];
+            document.getElementById('sign-in-btn').style.display = 'inline-flex';
+            document.getElementById('sign-out-btn').style.display = 'none';
+            document.getElementById('calendar-controls').style.display = 'none';
+            document.getElementById('events-section').style.display = 'none';
+            document.getElementById('calendar-list').innerHTML = '';
+            document.getElementById('events-grid').innerHTML = '';
+        }
+
+        async function addMyCalendars() {
+            if (!isSignedIn) {
+                showError('Please sign in first.');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                const response = await gapi.client.calendar.calendarList.list();
+                const calendarList = response.result.items;
+
+                for (const cal of calendarList) {
+                    if (!calendars.find(c => c.id === cal.id)) {
+                        calendars.push({
+                            id: cal.id,
+                            name: cal.summary,
+                            color: cal.backgroundColor || '#4285f4'
+                        });
+                    }
+                }
+
+                updateCalendarList();
+                refreshEvents();
+                showSuccess(`Added ${calendarList.length} calendars from your account.`);
+            } catch (error) {
+                showError('Failed to load your calendars: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function addCalendar() {
+            const calendarId = document.getElementById('calendar-id-input').value.trim();
+            
+            if (!calendarId) {
+                showError('Please enter a calendar ID.');
+                return;
+            }
+
+            if (calendars.find(c => c.id === calendarId)) {
+                showError('Calendar already added.');
+                return;
+            }
+
+            showLoading(true);
+            try {
+                // Try to get calendar info to validate
+                const response = await gapi.client.calendar.calendars.get({
+                    calendarId: calendarId
+                });
+
+                calendars.push({
+                    id: calendarId,
+                    name: response.result.summary,
+                    color: response.result.backgroundColor || '#4285f4'
+                });
+
+                document.getElementById('calendar-id-input').value = '';
+                updateCalendarList();
+                refreshEvents();
+                showSuccess('Calendar added successfully!');
+            } catch (error) {
+                showError('Failed to add calendar: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function removeCalendar(calendarId) {
+            calendars = calendars.filter(c => c.id !== calendarId);
+            updateCalendarList();
+            refreshEvents();
+            showSuccess('Calendar removed.');
+        }
+
+        function updateCalendarList() {
+            const container = document.getElementById('calendar-list');
+            container.innerHTML = '';
+
+            calendars.forEach(calendar => {
+                const item = document.createElement('div');
+                item.className = 'calendar-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="calendar-name">${escapeHtml(calendar.name)}</div>
+                        <div class="calendar-id">${escapeHtml(calendar.id)}</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeCalendar('${escapeHtml(calendar.id)}')">
+                        Remove
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        async function refreshEvents() {
+            if (calendars.length === 0) {
+                document.getElementById('events-grid').innerHTML = '<p style="text-align: center; color: #666;">No calendars added yet.</p>';
+                return;
+            }
+
+            showLoading(true);
+            const eventsGrid = document.getElementById('events-grid');
+            eventsGrid.innerHTML = '';
+
+            const now = new Date();
+            const timeMin = now.toISOString();
+            const timeMax = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(); // 30 days from now
+
+            for (const calendar of calendars) {
+                try {
+                    const response = await gapi.client.calendar.events.list({
+                        calendarId: calendar.id,
+                        timeMin: timeMin,
+                        timeMax: timeMax,
+                        showDeleted: false,
+                        singleEvents: true,
+                        maxResults: 10,
+                        orderBy: 'startTime'
+                    });
+
+                    const events = response.result.items || [];
+                    
+                    const calendarDiv = document.createElement('div');
+                    calendarDiv.className = 'calendar-events';
+                    calendarDiv.style.borderLeftColor = calendar.color;
+                    
+                    calendarDiv.innerHTML = `
+                        <div class="calendar-title">${escapeHtml(calendar.name)}</div>
+                        ${events.length === 0 ? 
+                            '<p style="color: #666; font-style: italic;">No upcoming events</p>' :
+                            events.map(event => `
+                                <div class="event">
+                                    <div class="event-title">${escapeHtml(event.summary || 'No title')}</div>
+                                    <div class="event-time">${formatEventTime(event)}</div>
+                                </div>
+                            `).join('')
+                        }
+                    `;
+                    
+                    eventsGrid.appendChild(calendarDiv);
+                } catch (error) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'calendar-events';
+                    errorDiv.innerHTML = `
+                        <div class="calendar-title">${escapeHtml(calendar.name)}</div>
+                        <div class="error" style="margin: 0;">
+                            Failed to load events: ${escapeHtml(error.message)}
+                        </div>
+                    `;
+                    eventsGrid.appendChild(errorDiv);
+                }
+            }
+
+            showLoading(false);
+            document.getElementById('last-updated').textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
+        }
+
+        function formatEventTime(event) {
+            const start = event.start.dateTime ? new Date(event.start.dateTime) : new Date(event.start.date);
+            const end = event.end.dateTime ? new Date(event.end.dateTime) : new Date(event.end.date);
+            
+            if (event.start.date) {
+                // All-day event
+                return start.toLocaleDateString();
+            } else {
+                // Timed event
+                return `${start.toLocaleDateString()} ${start.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})} - ${end.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+            }
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            removeMessages();
+            const error = document.createElement('div');
+            error.className = 'error';
+            error.textContent = message;
+            document.querySelector('.container').appendChild(error);
+            setTimeout(removeMessages, 5000);
+        }
+
+        function showSuccess(message) {
+            removeMessages();
+            const success = document.createElement('div');
+            success.className = 'success';
+            success.textContent = message;
+            document.querySelector('.container').appendChild(success);
+            setTimeout(removeMessages, 3000);
+        }
+
+        function removeMessages() {
+            const messages = document.querySelectorAll('.error:not(.error div), .success');
+            messages.forEach(msg => msg.remove());
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Allow Enter key in input field
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('calendar-id-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    addCalendar();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
