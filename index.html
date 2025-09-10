@@ -18,13 +18,14 @@
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: none;
+            width: 100%;
+            margin: 0;
             background: #ffffff;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 0 30px rgba(211, 188, 141, 0.3);
+            box-shadow: none;
         }
 
         .header {
@@ -955,8 +956,8 @@
 
     <script>
         // Configuration - Replace with your own Google API credentials
-        const CLIENT_ID = '850403111308-r3j8hku5lb9efkg2r1ajte7mu6hlf76b.apps.googleusercontent.com';
-        const API_KEY = 'AIzaSyCeibmX-PQqFBbADI6m80Xce_WL42QIEks';
+        const CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID.googleusercontent.com';
+        const API_KEY = 'YOUR_GOOGLE_API_KEY';
         const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
         const SCOPES = 'https://www.googleapis.com/auth/calendar.readonly';
 
